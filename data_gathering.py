@@ -36,8 +36,6 @@ CONTROL_URL = f"http://{MACBOOK_IP}:8000/control/current-status"
 # rpicam-vid is the new standard on Raspberry Pi OS (Bookworm)
 CAMERA_CMD = f"rpicam-vid -t 0 --inline --codec h264 --width 640 --height 480 --framerate 30 -o udp://{MACBOOK_IP}:5000"
 
-TEMP_DEVICE_FILE = get_temp_device_file()
-
 def save_calibration():
     """Persists the current calibration values to a local file."""
     global EC_K_VALUE, CAL_POINTS
@@ -111,6 +109,8 @@ def get_temp_device_file():
     if not device_folders:
         return None
     return device_folders[0] + '/w1_slave'
+
+TEMP_DEVICE_FILE = get_temp_device_file()
 
 def read_temp_raw(file_path):
     """Reads the raw temperature file content."""
