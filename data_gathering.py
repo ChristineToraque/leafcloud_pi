@@ -149,15 +149,12 @@ def get_active_command():
         dict: The response JSON if successful, or None otherwise.
     """
     try:
-        print(f"--> [DEBUG] Executing get_active_command: Polling {CONTROL_URL}...")
         response = requests.get(CONTROL_URL, timeout=2.0)
         if response.status_code == 200:
             data = response.json()
             return data
-        else:
-            print(f"--> [DEBUG] get_active_command: Server returned Status {response.status_code}")
-    except Exception as e:
-        print(f"--> [DEBUG] get_active_command: Exception caught - {e}")
+        except Exception:
+            pass
     return None
 
 def check_for_quit():
@@ -393,25 +390,18 @@ def main():
             # 6. Handle Server Communication
             server_status = "Waiting"
             if not active_command:
-                print("--> [DEBUG] Branch: Offline (No active command)")
                 server_status = "Offline"
             elif not bucket_id or bucket_id == "STOP":
-                print(f"--> [DEBUG] Branch: Idle/STOP (bucket_id={bucket_id})")
                 server_status = f"Idle ({bucket_id})"
             elif ph_update_requested:
-                print("--> [DEBUG] Branch: Paused (pH Mode)")
                 server_status = "Paused (pH Mode)"
             elif ec_calibration_requested:
-                print("--> [DEBUG] Branch: EC Calibration")
                 server_status = "EC Calibration"
             elif ph_401_calibration_requested:
-                print("--> [DEBUG] Branch: pH 4.01 Calibration")
                 server_status = "pH 4.01 Cal"
             elif ph_686_calibration_requested:
-                print("--> [DEBUG] Branch: pH 6.86 Calibration")
                 server_status = "pH 6.86 Cal"
             else:
-                print("--> [DEBUG] Branch: Preparing Payload for FastAPI")
                 # Prepare Minimalist Payload for FastAPI
                 payload = {
                     "bucket_id": bucket_id,
